@@ -30,4 +30,4 @@ function ChangeTimeZone
 }
 
 
-feedstail -u $FEED -r -i 60 -f "{published} - {summary}" | sed --unbuffered 's/<[^>]\+>//g;s/#38;//g;/^$/d' | ChangeTimeZone | grep -v "todo.txt"
+feedstail -u $FEED -r -i 60 -f "{published} - {summary}" | sed --unbuffered 's/<[^>]\+>//g;s/#38;//g;s/amp;//g;/^$/d' | ChangeTimeZone | grep -v "todo.txt"
