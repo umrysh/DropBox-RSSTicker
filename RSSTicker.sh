@@ -29,5 +29,19 @@ function ChangeTimeZone
 	done
 }
 
+function Addcolor
+{
+  while read DATA
+  do
+    if [[ "$DATA" =~ "[Dropbox]" ]]
+	then
+		# Blue
+		echo -e "\e[1;34m$DATA\e[0m"
+    else
+    	echo "$DATA"
+	fi
+  done
+}
 
-feedstail -u $FEED -r -i 60 -f "{published} - {summary}" | sed --unbuffered 's/<[^>]\+>//g;s/#38;//g;s/amp;//g;/^$/d' | ChangeTimeZone | grep -Ev "todo.txt|done.txt"
+
+feedstail -u $FEED -r -i 60 -f "{published} - {summary}" | sed --unbuffered 's/<[^>]\+>//g;s/#38;//g;s/amp;//g;/^$/d' | ChangeTimeZone | Addcolor | grep --color=never -Ev "todo.txt|done.txt"
