@@ -45,3 +45,7 @@ function Addcolor
 
 
 feedstail -u $FEED -r -i 60 -f "{published} - {summary}" | sed --unbuffered 's/<[^>]\+>//g;s/#38;//g;s/amp;//g;/^$/d' | ChangeTimeZone | Addcolor | grep --color=never -Ev "todo.txt|done.txt"
+
+# If you need feedstail to maintain a larger cache of read items then the default of 100 you can install my fork [https://github.com/umrysh/feedstail] and use the command below instead of the one above. It will increase the cache to 800 items.
+
+# feedstail -u $FEED -c 800 -r -i 60 -f "{published} - {summary}" | sed --unbuffered 's/<[^>]\+>//g;s/#38;//g;s/amp;//g;/^$/d' | ChangeTimeZone | Addcolor | grep --color=never -Ev "todo.txt|done.txt"
