@@ -16,12 +16,13 @@
 
 # Set your DropBox Feed address
 FEED="https://www.dropbox.com/yada/yada/yada/events.xml"
+ALERT_IMAGE="twitter.jpg"
 
 
 function ChangeTimeZone
 {
 	while read DATA
-  	do
+	do
 		DATESTRING=`echo "$DATA" | cut -d '-' -f 1`
 		DATESTRING2=`echo "$DATESTRING" | sed 's/GMT//g'`
 		NEWDATE=`date --date='TZ="GMT" '"$DATESTRING2"`
@@ -31,16 +32,31 @@ function ChangeTimeZone
 
 function Addcolor
 {
-  while read DATA
-  do
-    if [[ "$DATA" =~ "[Dropbox]" ]]
-	then
-		# Blue
-		echo -e "\e[1;34m$DATA\e[0m"
-    else
-    	echo "$DATA"
-	fi
-  done
+	while read DATA
+	do
+		if [[ "$DATA" =~ "[Dropbox]" ]]
+		then
+			# Blue
+			echo -e "\e[1;34m$DATA\e[0m"
+		elif [[ "$DATA" =~ "[Twitter]" ]]
+		then
+			# Notify Me
+			NAME=`echo $DATA | cut -d '-' -f 2- | cut -d ' ' -f3`
+			TWEET=`echo $DATA | cut -d '-' -f 2- | cut -d ':' -f 2- | sed 's/^ *//g'`
+			if [ "${TWEET:0:1}" != "@" ] ; then
+				DISPLAY=:0.0 XAUTHORITY=~/.Xauthority notify-send -i $ALERT_IMAGE -t 5000 --hint=int:transient:1 -- "$NAME" "$TWEET";
+			fi
+			if [[ ${#DATA} > 140 ]]
+			then
+				LENGTH=$((${#DATA}-3))
+				echo "$DATA" | awk -v var=$LENGTH '{print substr($0,0,var)}'
+			else
+				echo "$DATA"
+			fi
+		else
+			echo "$DATA"
+		fi
+	done
 }
 
 
