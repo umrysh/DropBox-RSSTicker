@@ -46,13 +46,7 @@ function Addcolor
 			if [ "${TWEET:0:1}" != "@" ] ; then
 				DISPLAY=:0.0 XAUTHORITY=~/.Xauthority notify-send -i $ALERT_IMAGE -t 5000 --hint=int:transient:1 -- "$NAME" "$TWEET";
 			fi
-			if [[ ${#DATA} > 140 ]]
-			then
-				LENGTH=$((${#DATA}-3))
-				echo "$DATA" | awk -v var=$LENGTH '{print substr($0,0,var)}'
-			else
-				echo "$DATA"
-			fi
+			echo "$DATA" | tr -cd '[[:alnum:]] \r\n=;:`"<>,./?!@#$%^&(){}[]_-'
 		else
 			echo "$DATA"
 		fi
